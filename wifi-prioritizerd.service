@@ -1,0 +1,11 @@
+[Unit]
+Description=Wifi Prioritizer Service
+
+[Service]
+ExecStart=/sbin/wifi-prioritizerd
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
+

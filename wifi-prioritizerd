@@ -1,0 +1,30 @@
+#! /bin/bash
+
+
+log_file="/var/log/wifi-prioritizer.log"
+config_file="/etc/wifi-priorities.conf"
+
+while true; do
+	current_time=$(date '+%Y-%m-%d %H:%M:%S')
+	# For all networks in the priority file
+	for name in $(cat "$config_file"); do
+		echo "$current_time [INFO]: Checking '$name' connection"
+		# If we are not connected to it, then connect and break
+		if nmcli -f ACTIVE,NAME c show | grep -q "no.*$name" ; then 
+			echo "$current_time [INFO]: Connecting to WIFI: '$name'" | tee $log_file
+			nmcli c up "$name" > /dev/null 2>&1
+			break
+		fi
+
+		echo "$current_time [INFO]: Already connected to WIFI: '$name'" | tee $log_file
+
+		break
+	done
+	sleep 60
+done
+
+
+
+
+
+
